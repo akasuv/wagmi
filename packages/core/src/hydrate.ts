@@ -12,8 +12,11 @@ export function hydrate(config: Config, parameters: HydrateParameters) {
   if (initialState)
     config.setState({
       ...initialState,
+      connections: reconnectOnMount ? initialState.connections : new Map(),
       status: reconnectOnMount ? 'reconnecting' : 'disconnected',
     })
+  else if (!reconnectOnMount)
+    config.setState((x) => ({ ...x, connections: new Map() }))
 
   return {
     async onMount() {
